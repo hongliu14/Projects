@@ -1,3 +1,9 @@
+# Projects
+
+Practice the course materials of Ed Donner's Agentic AI course.
+
+---
+
 ## Master AI Agentic Engineering -  build autonomous AI Agents
 
 ### 6 week journey to code and deploy AI Agents with OpenAI Agents SDK, CrewAI, LangGraph, AutoGen and MCP
