@@ -59,7 +59,7 @@ requires-dist = [
     { name = "autogen-agentchat", specifier = ">=0.4.9.2" },
     { name = "autogen-ext", extras = ["grpc", "mcp", "ollama", "openai"], specifier = ">=0.4.9.2" },
     { name = "bs4", specifier = ">=0.0.2" },
-    { name = "gradio", specifier = ">=5.22.0" },
+    { name = "gradio", specifier = ">=5.22.0,<6.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "ipykernel", specifier = ">=6.29.5" },
     { name = "ipywidgets", specifier = ">=8.1.5" },
