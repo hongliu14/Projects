@@ -113,15 +113,31 @@ If the user is engaging in discussion, try to steer them towards getting in touc
         return system_prompt
     
     def chat(self, message, history):
-        messages = [{"role": "system", "content": self.system_prompt()}] + history + [{"role": "user", "content": message}]
+        # Gradio can pass message as a dict in some configurations.
+        if isinstance(message, dict):
+            message = message.get("text", "")
+
+        # Normalize history across Gradio versions/types.
+        normalized_history = []
+        for h in history or []:
+            if isinstance(h, dict) and "role" in h and "content" in h:
+                normalized_history.append({"role": h["role"], "content": h["content"]})
+            elif isinstance(h, (list, tuple)) and len(h) == 2:
+                user_msg, assistant_msg = h
+                if user_msg:
+                    normalized_history.append({"role": "user", "content": user_msg})
+                if assistant_msg:
+                    normalized_history.append({"role": "assistant", "content": assistant_msg})
+
+        messages = [{"role": "system", "content": self.system_prompt()}] + normalized_history + [{"role": "user", "content": message}]
         done = False
         while not done:
             response = self.openai.chat.completions.create(model="gpt-4o-mini", messages=messages, tools=tools)
             if response.choices[0].finish_reason=="tool_calls":
-                message = response.choices[0].message
-                tool_calls = message.tool_calls
+                assistant_message = response.choices[0].message
+                tool_calls = assistant_message.tool_calls
                 results = self.handle_tool_call(tool_calls)
-                messages.append(message)
+                messages.append(assistant_message)
                 messages.extend(results)
             else:
                 done = True
